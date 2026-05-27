@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { BackgroundFX } from "@/components/BackgroundFX";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/youases-logo.png";
 
 export const Route = createFileRoute("/")({
@@ -24,6 +25,31 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
       { property: "og:title", content: "YouAses — Building the future of digital innovation" },
       { property: "og:description", content: "Modern technology company building intelligent digital solutions, AI, and advanced software." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "icon", type: "image/png", href: logo },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "YouAses",
+          url: "/",
+          logo,
+          description:
+            "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation.",
+          sameAs: [
+            "https://www.facebook.com/profile.php?id=61590554395056",
+            "https://www.instagram.com/youases.official",
+          ],
+          email: "youases.official@gmail.com",
+        }),
+      },
     ],
   }),
   component: Index,
@@ -239,6 +265,29 @@ function Technology() {
 function Waitlist() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    setError(null);
+    const { error: dbError } = await supabase
+      .from("waitlist_subscribers")
+      .insert({ email, source: "landing" });
+    setLoading(false);
+    if (dbError) {
+      if (dbError.code === "23505") {
+        setSubmitted(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+      return;
+    }
+    setSubmitted(true);
+  };
+
   return (
     <section id="waitlist" className="relative px-5 sm:px-8 py-24 sm:py-32">
       <div className="max-w-4xl mx-auto">
@@ -254,10 +303,7 @@ function Waitlist() {
             </h3>
             <p className="mt-3 text-muted-foreground max-w-md">Stay updated with our journey. No spam, just milestones.</p>
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (email) setSubmitted(true);
-              }}
+              onSubmit={onSubmit}
               className="mt-8 w-full max-w-lg flex flex-col sm:flex-row gap-3"
             >
               <input
@@ -266,15 +312,18 @@ function Waitlist() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                disabled={submitted || loading}
                 className="flex-1 px-5 py-3.5 rounded-full bg-input/60 border border-border text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-[0_0_20px_oklch(0.72_0.18_250/0.3)] transition-all"
               />
               <button
                 type="submit"
+                disabled={submitted || loading}
                 className="px-7 py-3.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:shadow-[0_0_30px_oklch(0.72_0.18_250/0.7)] hover:scale-[1.02] transition-all"
               >
-                {submitted ? "You're in ✓" : "Notify Me"}
+                {submitted ? "You're in ✓" : loading ? "Saving..." : "Notify Me"}
               </button>
             </form>
+            {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
           </div>
         </div>
       </div>
