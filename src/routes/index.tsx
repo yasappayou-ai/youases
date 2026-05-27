@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { BackgroundFX } from "@/components/BackgroundFX";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/youases-logo.png";
 
 export const Route = createFileRoute("/")({
@@ -24,6 +25,31 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
       { property: "og:title", content: "YouAses — Building the future of digital innovation" },
       { property: "og:description", content: "Modern technology company building intelligent digital solutions, AI, and advanced software." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "icon", type: "image/png", href: logo },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "YouAses",
+          url: "/",
+          logo,
+          description:
+            "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation.",
+          sameAs: [
+            "https://www.facebook.com/profile.php?id=61590554395056",
+            "https://www.instagram.com/youases.official",
+          ],
+          email: "youases.official@gmail.com",
+        }),
+      },
     ],
   }),
   component: Index,
