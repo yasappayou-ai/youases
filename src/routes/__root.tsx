@@ -76,10 +76,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
       { name: "author", content: "YouAses" },
       { property: "og:title", content: "YouAses — Building the future of digital innovation" },
-      { property: "og:description", content: "Modern technology company building intelligent digital solutions, AI, and advanced software." },
+      { property: "og:description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@YouAses" },
+      { name: "twitter:title", content: "YouAses — Building the future of digital innovation" },
+      { name: "twitter:description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a1ff064-47a6-4a9f-93a5-6df4d5942c13/id-preview-9a876c70--35a5639e-8371-443c-b3c5-f3b144963f9d.lovable.app-1779898479693.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a1ff064-47a6-4a9f-93a5-6df4d5942c13/id-preview-9a876c70--35a5639e-8371-443c-b3c5-f3b144963f9d.lovable.app-1779898479693.png" },
     ],
     links: [
       {
